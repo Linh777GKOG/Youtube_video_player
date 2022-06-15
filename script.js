@@ -96,3 +96,56 @@ function handleTimelineUpdate(e) {
     timelineContainer.style.setProperty('--progress-position', percent);
   }
 }
+
+// Playback Speed
+speedBtn.addEventListener('click', changePlaybackSpeed);
+
+function changePlaybackSpeed() {
+  let newPlaybackRate = video.playbackRate + 0.25;
+  if (newPlaybackRate > 2) newPlaybackRate = 0.25;
+  video.playbackRate = newPlaybackRate;
+  speedBtn.textContent = `${newPlaybackRate}x`;
+}
+
+// Captions
+const captions = video.textTracks[0];
+captions.mode = 'hidden';
+
+captionsBtn.addEventListener('click', toggleCaptions);
+
+function toggleCaptions() {
+  const isHidden = captions.mode === 'hidden';
+  captions.mode = isHidden ? 'showing' : 'hidden';
+  videoContainer.classList.toggle('captions', isHidden);
+}
+
+// Duration
+video.addEventListener('loadeddata', () => {
+  totalTimeElem.textContent = formatDuration(video.duration);
+});
+
+video.addEventListener('timeupdate', () => {
+  currentTimeElem.textContent = formatDuration(video.currentTime);
+  const percent = video.currentTime / video.duration;
+  timelineContainer.style.setProperty('--progress-position', percent);
+});
+
+const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
+  minimumIntegerDigits: 2,
+});
+function formatDuration(time) {
+  const seconds = Math.floor(time % 60);
+  const minutes = Math.floor(time / 60) % 60;
+  const hours = Math.floor(time / 3600);
+  if (hours === 0) {
+    return `${minutes}:${leadingZeroFormatter.format(seconds)}`;
+  } else {
+    return `${hours}:${leadingZeroFormatter.format(
+      minutes
+    )}:${leadingZeroFormatter.format(seconds)}`;
+  }
+}
+
+function skip(duration) {
+  video.currentTime += duration;
+}
