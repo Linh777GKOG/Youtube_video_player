@@ -13,3 +13,40 @@ const volumeSlider = document.querySelector('.volume-slider');
 const videoContainer = document.querySelector('.video-container');
 const timelineContainer = document.querySelector('.timeline-container');
 const video = document.querySelector('video');
+
+document.addEventListener('keydown', (e) => {
+  const tagName = document.activeElement.tagName.toLowerCase();
+
+  if (tagName === 'input') return;
+
+  switch (e.key.toLowerCase()) {
+    case ' ':
+      if (tagName === 'button') return;
+    case 'k':
+      togglePlay();
+      break;
+    case 'f':
+      toggleFullScreenMode();
+      break;
+    case 't':
+      toggleTheaterMode();
+      break;
+    case 'i':
+      toggleMiniPlayerMode();
+      break;
+    case 'm':
+      toggleMute();
+      break;
+    case 'arrowleft':
+    case 'j':
+      skip(-5);
+      break;
+    case 'arrowright':
+    case 'l':
+      skip(5);
+      break;
+    case 'c':
+      toggleCaptions();
+      break;
+  }
+});
