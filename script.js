@@ -149,3 +149,28 @@ function formatDuration(time) {
 function skip(duration) {
   video.currentTime += duration;
 }
+// Volume
+muteBtn.addEventListener('click', toggleMute);
+volumeSlider.addEventListener('input', (e) => {
+  video.volume = e.target.value;
+  video.muted = e.target.value === 0;
+});
+
+function toggleMute() {
+  video.muted = !video.muted;
+}
+
+video.addEventListener('volumechange', () => {
+  volumeSlider.value = video.volume;
+  let volumeLevel;
+  if (video.muted || video.volume === 0) {
+    volumeSlider.value = 0;
+    volumeLevel = 'muted';
+  } else if (video.volume >= 0.5) {
+    volumeLevel = 'high';
+  } else {
+    volumeLevel = 'low';
+  }
+
+  videoContainer.dataset.volumeLevel = volumeLevel;
+});
